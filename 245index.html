@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>探索世界 - 4大必玩國家</title>
+    <style>
+        /* ==================== 1. 全域重設與核心樣式 ==================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f5f6fa; color: #333; line-height: 1.6; }
+        
+        /* ==================== 2. 純 CSS 單頁切換核心 ==================== */
+        .page { display: none; }
+        #home-page { display: block; } /* 預設顯示首頁 */
+
+        /* 錨點觸發時切換顯示對應頁面 */
+        #home:target ~ main #home-page { display: block; }
+        #japan:target ~ main #japan-page { display: block; }
+        #france:target ~ main #france-page { display: block; }
+        #egypt:target ~ main #egypt-page { display: block; }
+        #italy:target ~ main #italy-page { display: block; }
+
+        /* 觸發其他國家頁面時，隱藏預設的首頁 */
+        #japan:target ~ main #home-page, #france:target ~ main #home-page,
+        #egypt:target ~ main #home-page, #italy:target ~ main #home-page { display: none; }
+
+        /* ==================== 3. 導覽列與 Banner 樣式 ==================== */
+        header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .logo { font-size: 24px; font-weight: bold; text-decoration: none; color: white; }
+        nav { display: flex; gap: 10px; }
+        nav a { color: #e0e0e0; padding: 10px 20px; text-decoration: none; font-weight: 500; border-radius: 5px; transition: 0.3s; }
+        nav a:hover { color: white; background-color: rgba(255, 255, 255, 0.2); }
+
+        /* 通用 Banner */
+        .banner { height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 0 20px; background-position: center; background-size: cover; background-repeat: no-repeat; }
+        .banner h1 { font-size: 40px; margin-bottom: 10px; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .banner p { text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+        
+        /* ==================== 4. 內容區塊與網格排版 ==================== */
+        .content { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .section-title { text-align: center; margin-bottom: 40px; font-size: 32px; color: #222; }
+        
+        /* 歷史文化簡介排版 */
+        .intro-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 50px; align-items: center; }
+        .intro-text h2 { margin-bottom: 15px; border-left: 5px solid #1e3c72; padding-left: 10px; }
+        .intro-text p { margin-bottom: 15px; text-align: justify; }
+        .intro-img { width: 100%; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 300px; object-fit: cover; }
+
+        /* 首頁國家卡片網格 */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; text-decoration: none; color: inherit; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 12px 20px rgba(0,0,0,0.15); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .card-body h3 { font-size: 22px; margin-bottom: 10px; color: #1e3c72; }
+
+        /* 景點分頁橫式卡片 */
+        .spots-title { text-align: center; margin-bottom: 30px; font-size: 28px; color: #222; }
+        .spot-card { display: flex; background: white; margin-bottom: 30px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .spot-card img { width: 40%; object-fit: cover; min-height: 250px; }
+        .spot-info { padding: 30px; width: 60%; display: flex; flex-direction: column; justify-content: center; }
+        .spot-info h3 { font-size: 24px; margin-bottom: 15px; }
+
+        @media (max-width: 768px) { 
+            .intro-section, .spot-card { grid-template-columns: 1fr; flex-direction: column; } 
+            .spot-card img, .spot-info { width: 100%; }
+        }
+        footer { background-color: #222; color: #aaa; text-align: center; padding: 30px 20px; margin-top: 50px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- 用於純 CSS 切換的分頁錨點 -->
+    <div id="home"></div> <div id="japan"></div> <div id="france"></div> <div id="egypt"></div> <div id="italy"></div>
+
+    <!-- 頂部固定導覽列 -->
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo">🌍 大世界歷史文化旅遊網</a>
+            <nav>
+                <a href="#home">首頁</a> <a href="#japan">日本</a> <a href="#france">法國</a> <a href="#egypt">埃及</a> <a href="#italy">義大利</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- ==================== 頁面 1：首頁 ==================== -->
+        <div id="home-page" class="page">
+            <section class="banner" style="background-image: linear-gradient(rgba(207, 226, 243, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.airfaregeeks.com.au/wp-content/uploads/2022/01/Banner-Travel-the-world.jpeg'); height: 500px;">
+                <h1 style="font-size: 50px;">探索世界的每個角落</h1>
+                <p style="font-size: 30px; line-height: 1.6;">
+  橫跨四大洲，穿越千年歷史，帶您領略最深刻的文化底蘊與絕美景致。
+</p>
+            </section>
+            <div class="content">
+                <h2 class="section-title">熱門探索國家</h2>
+                <div class="grid">
+                    <a href="#japan" class="card">
+                        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600" alt="日本">
+                        <div class="card-body"><h3>日本 🇯🇵</h3><p>古老神社與現代科技完美交織，體驗大和民族獨特的心靈禪意與春櫻美景。</p></div>
+                    </a>
+                    <a href="#france" class="card">
+                        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600" alt="法國">
+                        <div class="card-body"><h3>法國 🇫🇷</h3><p>浪漫至極的藝術之都，從文藝復興的宮殿到左岸的咖啡香，無處不令人沉醉。</p></div>
+                    </a>
+                    <a href="#egypt" class="card">
+                        <img src="https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=600" alt="埃及">
+                        <div class="card-body"><h3>埃及 🇪🇬</h3><p>踏上神祕的法老土地，揭開金字塔與尼羅河文明沉睡千年的宏偉面紗。</p></div>
+                    </a>
+                    <a href="#italy" class="card">
+                        <img src="https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?w=600" alt="義大利">
+                        <div class="card-body"><h3>義大利 🇮🇹</h3><p>古羅馬帝國的發源地，文藝復興的搖籃，一場匯聚歷史、時尚與美食的饗宴。</p></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 頁面 2：日本頁面 ==================== -->
+        <div id="japan-page" class="page">
+            <section class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://assets.vogue.com/photos/668405014f23ca83ef816aaf/master/w_1920,c_limit/1029818226');">
+                <!-- 將中文標題放大到 32px，英文副標題放大到 20px -->
+<h1 style="font-size: 50px;">日出之國 - 日本</h1>
+<p style="font-size: 30px;">Japan - The Land of the Rising Sun</p>
+
+            </section>
+            <div class="content">
+                <div class="intro-section">
+                    <div class="intro-text"><!-- 將中文標題放大到 50px，英文副標題放大到 20px -->
+
+                        <h2 style="border-color: #bc002d; color: #bc002d;">歷史與文化背景</h2>
+                        <p style="font-size: 25px;"><strong>悠久歷史：</strong>歷經了神話色彩的繩文時代、武士崛起的幕府時代，並在明治維新後迅速走向現代化，完美保留了古老與現代的雙重面貌。</p>
+
+                        <p style="font-size: 25px;"><strong>大和文化：</strong>深植於「和」的精神，強調天人合一。從茶道、傳統和服，到席捲全球的現代動漫，展現了無與倫比的匠人精神。</p>
+                    </div>
+                    <img src="https://rimage.savorjapan.com/svj/image/discover_oishii_japan/216/article_89485_w640z.jpg" alt="日本文化">
+                </div>
+                <h2 class="spots-title">必訪經典景點</h2>
+                <div class="spot-card">
+                    <img src="https://hk.wamazing.com/media/wp-content/uploads/sites/5/2023/08/fujisanautumn_pixta_97045554_M-853x569.jpg.webp" alt="富士山 (Mount Fuji)">
+                    <div class="spot-info"><h3>🗻 富士山 (Mount Fuji)</h3><p style="font-size: 24px;">日本最高峰與國家象徵。這座完美的錐形火山常年白雪皚皚，被奉為聖山，其雄偉聖潔的姿態總能洗滌人心。</p>
+</div>
+                </div>
+                <div class="spot-card">
+                    <img src="https://www.agoda.com/wp-content/uploads/2024/07/Kiyomizu-dera-Temple-Kyoto-featured-1244x700.jpg" alt="京都清水寺 (Kiyomizu-dera)">
+                    <div class="spot-info"><h3>⛩️ 京都清水寺 (Kiyomizu-dera)</h3><p style="font-size: 24px;">京都最古老的寺院之一。其著名的「清水舞台」完全由巨型木樑交錯支撐，未動用一根釘子，春秋兩季櫻花與紅楓圍繞，景致如詩如畫。</p></div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- ==================== 頁面 3：法國頁面 ==================== --> 
+<div id="france-page" class="page"> 
+    
+    <!-- 橫幅（浪漫巴黎鐵塔背景） -->
+    <section class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://cdn.getyourguide.com/image/format=avif%2Cfit=cover%2Cgravity=auto%2Cquality=60%2Cwidth=1920%2Cheight=1080/dam/pexels-adrien-olichon-1257089-5091715-LOWRES.jpg');"> 
+        <h1 style="font-size: 50px;">浪漫與藝術之都 - 法國</h1>
+        <p style="font-size: 30px">France - The Capital of Romance and Art</p> 
+    </section> 
+
+    <div class="content"> 
+        <!-- 歷史文化介紹 -->
+        <div class="intro-section"> 
+            <div class="intro-text"> 
+                <!-- 使用法式經典深藍色 #002654 作為主題字體與邊框色 -->
+                <h2 style="border-color: #002654; color: #002654;">歷史與文化背景</h2> 
+                <p style="font-size: 25px;"><strong>輝煌歷史：</strong>從高盧羅馬時期的古老根基、波旁王朝的奢華巔峰，到法國大革命帶來的自由浪潮。這片土地孕育了無數改變世界歷史的關鍵時刻。</p> 
+                <p style="font-size: 25px;"><strong>法式美學：</strong>深植於「自由、平等、博愛」的精神。從高級時裝、米芝蓮精緻料理、頂級紅酒，到引領全球的哲學與藝術思潮，完美詮釋了「生活藝術」的真諦。</p> 
+            </div> 
+            <!-- 法式咖啡廳文化圖片 -->
+            <img src="https://www.tw-tw.com.tw/UploadIamge/Article/1/183/440_4202.jpg" alt="法國文化"> 
+        </div> 
+
+        <h2 class="spots-title">必訪經典景點</h2> 
+
+        <!-- 景點 1：艾菲爾鐵塔 -->
+        <div class="spot-card"> 
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600" alt="巴黎鐵塔 (Eiffel Tower)">
+
+            <div class="spot-info">
+                <h3>🗼 艾菲爾鐵塔 (Eiffel Tower)</h3>
+                <p style="font-size: 24px;">巴黎無可爭議的最高地標與浪漫象徵。這座落成於1889年的鋼鐵巨作，無論是白天的雄偉壯麗，還是夜晚每逢整點長達5分鐘的璀璨燈光騷，都令人嘆為觀止。</p>
+            </div> 
+        </div> 
+
+        <!-- 景點 2：羅浮宮 -->
+        <div class="spot-card"> 
+             <img src="https://res.cloudinary.com/dtljonz0f/image/upload/f_auto/q_auto/v1/gc-v1/paris-pass/pexels-dimitry-anikin-4848757-2.jpg" alt="羅浮宮 (Louvre Museum)">
+            <div class="spot-info">
+                <h3>🏛️ 羅浮宮博物館 (Louvre Museum)</h3>
+                <p style="font-size: 24px;">全球規模最大的藝術殿堂。古典宮殿建築與貝聿銘設計的現代玻璃金字塔完美融合，館內珍藏著《蒙娜麗莎》等數十萬件人類文明瑰寶，是藝術愛好者的朝聖地。</p>
+            </div> 
+        </div> 
+    </div> 
+</div>
+
+
+<!-- ==================== 頁面 4：埃及頁面 ==================== --> 
+<div id="egypt-page" class="page"> 
+    
+    <!-- 橫幅（壯麗的吉薩金字塔與駱駝背景） -->
+    <section class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://cdn.getyourguide.com/image/format=auto%2Cfit=cover%2Cgravity=auto%2Cquality=60%2Cwidth=1920%2Cheight=1280/dam/iStock-172186659-LOW%20RES.jpg');"> 
+        <h1 style="font-size: 50px;">古文明之源 - 埃及</h1>
+        <p style="font-size: 30px;">Egypt - The Cradle of Ancient Civilization</p> 
+    </section> 
+
+    <div class="content"> 
+        <!-- 歷史文化介紹 -->
+        <div class="intro-section"> 
+            <div class="intro-text"> 
+                <!-- 使用最能代表法老與沙漠的金色系 #c59b27 作為主題字體與邊框色 -->
+                <h2 style="border-color: #c59b27; color: #c59b27;">歷史與文化背景</h2> 
+                <p style="font-size: 25px;"><strong>千古文明：</strong>作為世界四大古文明之一，埃及擁有超過五千年的輝煌歷史。從法老統治的神權時代、宏偉金字塔的誕生，到圖坦卡門的黃金面具，留下了無數令現代人驚嘆的歷史謎團。</p> 
+                <p style="font-size: 25px;"><strong>尼羅河禮物：</strong>埃及文化深植於神話與來世信仰，強調人與神明、自然的共生。從精緻的象形文字、神廟壁畫，到對太陽神的崇拜，處處展現了古埃及人超越時代的智慧與工藝。</p> 
+            </div> 
+            <!-- 古埃及象形文字雕刻圖片 -->
+            <img src="https://dewonder.travel/_next/image/?url=https%3A%2F%2Fcdn.dewonder.travel%2Fmedia%2F12037%2F971c6d09-6ccd-4d05-997b-4c51abfa63f4.jpg&w=1080&q=90" alt="埃及文化"> 
+        </div> 
+
+        <h2 class="spots-title">必訪經典景點</h2> 
+
+        <!-- 景點 1：吉薩金字塔群 -->
+        <div class="spot-card"> 
+            <img src="https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=600" alt="吉薩金字塔群 (Giza Pyramids)">
+            <div class="spot-info">
+                <h3>🔺 吉薩金字塔群 (Giza Pyramid Complex)</h3>
+                <p style="font-size: 24px;">世界古代七大奇蹟中唯一碩果僅存的偉大建築。由胡夫、卡夫拉與門卡烏拉三座巨大金字塔組成，守護在旁的獅身人面像歷經千年風沙，依然散發著令人屏息的神秘威嚴。</p>
+            </div> 
+        </div> 
+
+        <!-- 景點 2：樂蜀神廟 -->
+        <div class="spot-card"> 
+            <img src="https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=600" alt="盧克索神廟 (Luxor Temple)">
+            <div class="spot-info">
+                <h3>🏛️ 樂蜀神廟 (Luxor Temple)</h3>
+                <p style="font-size: 24px;">坐落於古埃及首都底比斯（現名樂蜀）的尼羅河東岸。這座歷史悠久的大型神廟由巨型石柱、巨大的法老雕像與宏偉的方尖碑交織而成，在夜間燈光點亮時，更顯靈性與震撼。</p>
+            </div> 
+        </div> 
+    </div> 
+</div>
+
+
+<!-- ==================== 頁面 5：意大利頁面 ==================== --> 
+<div id="italy-page" class="page"> 
+    
+    <!-- 橫幅（夕陽下的羅馬全景背景） -->
+    <section class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://www.dshgyl.com/uploads/editor/image/20201229/1609228729316494.jpg');"> 
+        <h1 style="font-size: 50px;">文藝復興之搖籃 - 意大利</h1>
+        <p style="font-size: 30px;">Italy - The Cradle of the Renaissance</p> 
+    </section> 
+
+    <div class="content"> 
+        <!-- 歷史文化介紹 -->
+        <div class="intro-section"> 
+            <div class="intro-text"> 
+                <!-- 使用經典的文藝復興酒紅色 #8b1e2a 作為主題字體與邊框色 -->
+                <h2 style="border-color: #8b1e2a; color: #8b1e2a;">歷史與文化背景</h2> 
+                <p style="font-size: 25px;"><strong>帝國榮耀：</strong>從古羅馬帝國的橫跨歐亞非，到14世紀席捲全歐的文藝復興運動。達文西、米開朗基羅等大師在此誕生，讓這片土地成為西方文明的核心發源地。</p> 
+                <p style="font-size: 25px;"><strong>義式生活：</strong>崇尚「甜蜜生活」(La Dolce Vita) 的哲學。將熱情融入生活，不論是正宗意式薄餅與咖啡、頂級超跑工藝，還是米蘭的頂尖時尚，都展現了無與倫比的美學品味。</p> 
+            </div> 
+            <!-- 意大利傳統意粉與美食圖片 -->
+            <img src="https://m1.aboluowang.com/uploadfile/2024/1114/20241114234330280.png" alt="經典番茄羅勒意粉">
+
+        </div> 
+
+        <h2 class="spots-title">必訪經典景點</h2> 
+
+        <!-- 景點 1：羅馬競技場 -->
+        <div class="spot-card"> 
+            <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600" alt="羅馬競技場 (Colosseum)">
+
+
+
+            <div class="spot-info">
+                <h3>🏟️ 羅馬競技場 (Colosseum)</h3>
+                <p style="font-size: 24px;">古羅馬帝國最偉大的建築傑作。這座歷經近兩千年風雨的圓形劇場，以其宏偉的拱門結構和複雜的地下隧道系統聞名，默默訴說著當年角鬥士與帝國的輝煌傳奇。</p>
+            </div> 
+        </div> 
+
+        <!-- 景點 2：威尼斯水都 -->
+        <div class="spot-card"> 
+            <img src="https://img.natgeomedia.com/userfiles/sm/sm1920_images_A1/5305/6835977935.jpg" alt="威尼斯水上水城 (Venice)">
+            <div class="spot-info">
+                <h3>🛶 威尼斯運河 (Venice Canals)</h3>
+                <p style="font-size: 24px;">世界上唯一沒有汽車的浪漫水上都市。由百多個小島與無數橋樑串聯而成，乘著傳統的「貢多拉」小船穿梭於錯綜複雜的碧綠水道與古老宮殿之間，彷彿置身於流動的畫卷中。</p>
+            </div> 
+        </div> 
+    </div> 
+</div>
+
+
